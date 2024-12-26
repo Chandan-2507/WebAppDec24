@@ -1,4 +1,4 @@
-@Library('jenkins-library') _//This is the Jenkins library Name nandangowda
+@Library('jenkins-library') _//This is the Jenkins library Name
 def mvnCommand = env.mvncommand ?: 'install'
 def deployEnv = env.DeploymentEnvironment ?: 'staging'
 pipeline {

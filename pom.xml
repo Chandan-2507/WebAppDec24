@@ -61,6 +61,10 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
+                        
+    <connectTimeout>60000</connectTimeout>
+    <readTimeout>60000</readTimeout>
+
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>

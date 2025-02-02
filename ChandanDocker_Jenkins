@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+
+    environment {
+        GITHUB_REPO = 'https://github.com/Chandan-2507/your-repo-name.git'  
+        BRANCH_NAME = 'main' 
+        IMAGE_NAME = 'your-ecr-repo-name'  // Replace with your ECR repo name
+        AWS_REGION = 'ap-south-1'  
+        ECR_URI = "your-account-id.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"  // Replace with your AWS account ID
+    }
+
+    stages {
+        stage('Checkout Source Code') {
+            steps {
+                git branch: "${BRANCH_NAME}", url: "${GITHUB_REPO}"
+            }
+        }
+
+        stage('Build with Maven') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${IMAGE_NAME}:latest")
+                }
+            }
+        }
+
+        stage('Login to AWS ECR') {
+            steps {
+                sh 'aws --version'  // Check if AWS CLI is configured
+                sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URI}"
+            }
+        }
+
+        stage('Push Docker Image to ECR') {
+            steps {
+                script {
+                    dockerImage.tag("${ECR_URI}:latest")
+                    sh "docker push ${ECR_URI}:latest"
+                }
+            }
+        }
+
+        stage('Deploy Container from ECR') {
+            steps {
+                sh "docker pull ${ECR_URI}:latest"
+                sh 'docker stop app || true && docker rm app || true'  // Stop and remove old container if exists
+                sh "docker run -d --name app -p 8080:8080 ${ECR_URI}:latest"  // Adjust ports as needed
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Build or Deployment failed!'
+        }
+    }
+}

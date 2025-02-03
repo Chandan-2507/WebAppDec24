@@ -6,7 +6,7 @@ pipeline {
         BRANCH_NAME = 'main' 
         IMAGE_NAME = 'your-ecr-repo-name'  // Replace with your ECR repo name
         AWS_REGION = 'ap-south-1'  
-        ECR_URI = "your-account-id.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"  // Replace with your AWS account ID
+        ECR_URI = "920373030315.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"  
     }
 
     stages {

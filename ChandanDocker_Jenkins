@@ -4,7 +4,7 @@ pipeline {
     environment {
         GITHUB_REPO = 'https://github.com/Chandan-2507/your-repo-name.git'  
         BRANCH_NAME = 'main' 
-        IMAGE_NAME = 'your-ecr-repo-name'  // Replace with your ECR repo name
+        IMAGE_NAME = 'your-ecr-repo-name'  
         AWS_REGION = 'ap-south-1'  
         ECR_URI = "920373030315.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_NAME}"  
     }

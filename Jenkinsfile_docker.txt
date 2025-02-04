@@ -38,7 +38,7 @@ pipeline {
 
         stage('Cloning Git Repository') {
             steps {
-                git branch: 'master', url: GIT_REPO_URL, credentialsId: GIT_CREDENTIALS_ID
+                git branch: 'main', url: GIT_REPO_URL, credentialsId: GIT_CREDENTIALS_ID
             }
         }
 
